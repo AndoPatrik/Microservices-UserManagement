@@ -1,7 +1,0 @@
-17:23:56 - Requested user(s) by id=1.
-17:24:03 - Requested user(s) by id with no results.
-17:24:13 - User validation success! (id=1)
-17:24:16 - User validation failed. (id=9)
-17:24:21 - Requested list of all users.
-17:25:20 - User validation success! (id=1)
-17:25:50 - User validation success! (id=1)
