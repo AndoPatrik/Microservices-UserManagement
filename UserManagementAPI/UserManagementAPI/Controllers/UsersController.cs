@@ -1,10 +1,8 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using UserManagementAPI.Models;
 
 namespace UserManagementAPI.Controllers
@@ -15,12 +13,14 @@ namespace UserManagementAPI.Controllers
     {
         private readonly UserManagementContext _context = new UserManagementContext();
 
-       
+        Logger l = new Logger();
+
 
         // GET: api/Users
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
         {
+            l.LogAction("Requested list of all users.");
             return await _context.Users.ToListAsync();
         }
 
@@ -38,11 +38,41 @@ namespace UserManagementAPI.Controllers
             return users;
         }
 
-        // PUT: api/Users/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        //// PUT: api/Users/5
+        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        //// more details see https://aka.ms/RazorPagesCRUD.
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutUsers(int id, Users users)
+        //{
+        //    if (id != users.Id)
+        //    {
+        //        return BadRequest();
+        //    }
+
+        //    _context.Entry(users).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!UsersExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return NoContent();
+        //}
+
+        // ValidateUser
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUsers(int id, Users users)
+        public async Task<IActionResult> ValidateUser(int id, Users users)
         {
             if (id != users.Id)
             {
