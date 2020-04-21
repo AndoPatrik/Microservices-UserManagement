@@ -32,7 +32,47 @@ namespace UserManagementAPI.Controllers
 
             if (users == null)
             {
+                l.LogAction("Requested user(s) by id with no results.");
                 return NotFound();
+            }
+
+            l.LogAction("Requested user(s) by id="+id+".");
+            return users;
+        }
+
+        //Validate User
+        [Route("validate{id}")]
+        public async Task<ActionResult<Users>> ValidateUser(int id)
+        {
+            var users = await _context.Users.FindAsync(id);
+
+            if (users == null)
+            {
+                l.LogAction("User validation failed. (id=" + id + ")");
+                return NotFound();
+            }
+            else
+            {
+                users.IsVerified = true;
+
+                try
+                {
+                    await _context.SaveChangesAsync();
+                    l.LogAction("User validation success! (id="+id+")");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!UsersExists(id))
+                    {
+                        l.LogAction("User validation failed. (id=" + id + ")");
+                        return NotFound();
+                    }
+                    else
+                    {
+                        l.LogAction("User validation failed. (id=" + id + ")");
+                        throw;
+                    }
+                }
             }
 
             return users;
@@ -69,36 +109,6 @@ namespace UserManagementAPI.Controllers
 
         //    return NoContent();
         //}
-
-        // ValidateUser
-        [HttpPut("{id}")]
-        public async Task<IActionResult> ValidateUser(int id, Users users)
-        {
-            if (id != users.Id)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(users).State = EntityState.Modified;
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UsersExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // POST: api/Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
