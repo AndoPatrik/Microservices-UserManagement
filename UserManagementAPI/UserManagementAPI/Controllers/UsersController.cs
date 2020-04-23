@@ -122,9 +122,24 @@ namespace UserManagementAPI.Controllers
             return CreatedAtAction("GetUsers", new { id = users.Id }, users);
         }
 
-        // DELETE: api/Users/5
+        //// DELETE: api/Users/5
+        //[HttpDelete("{id}")]
+        //public async Task<ActionResult<Users>> DeleteUsers(int id)
+        //{
+        //    var users = await _context.Users.FindAsync(id);
+        //    if (users == null)
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    _context.Users.Remove(users);
+        //    await _context.SaveChangesAsync();
+
+        //    return users;
+        //}
+
         [HttpDelete("{id}")]
-        public async Task<ActionResult<Users>> DeleteUsers(int id)
+        public async Task<ActionResult<Users>> isDeletedUser(int id)
         {
             var users = await _context.Users.FindAsync(id);
             if (users == null)
@@ -132,7 +147,12 @@ namespace UserManagementAPI.Controllers
                 return NotFound();
             }
 
-            _context.Users.Remove(users);
+            users.IsDeleted = true;
+
+            _context.Entry(users).State = EntityState.Modified;
+
+            //_context.Users.Remove(users);
+
             await _context.SaveChangesAsync();
 
             return users;
