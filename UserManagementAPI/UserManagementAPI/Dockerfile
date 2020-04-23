@@ -7,10 +7,10 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/core/sdk:3.1-buster AS build
 WORKDIR /src
-COPY ["UserManagementAPI/UserManagementAPI.csproj", "UserManagementAPI/"]
-RUN dotnet restore "UserManagementAPI/UserManagementAPI.csproj"
+COPY ["UserManagementAPI.csproj", "./"]
+RUN dotnet restore "UserManagementAPI.csproj"
 COPY . .
-WORKDIR "/src/UserManagementAPI"
+#WORKDIR "/src/UserManagementAPI"
 RUN dotnet build "UserManagementAPI.csproj" -c Release -o /app/build
 
 FROM build AS publish
