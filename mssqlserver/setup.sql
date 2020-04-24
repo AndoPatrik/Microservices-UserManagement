@@ -2,7 +2,8 @@ CREATE DATABASE UserManagementDB;
 GO
 USE UserManagementDB;
 GO
-CREATE TABLE users (
+CREATE TABLE users
+(
 	id INT IDENTITY(1,1) NOT NULL,
 	firstName VARCHAR(32),
 	lastName VARCHAR(32),

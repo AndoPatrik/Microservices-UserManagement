@@ -22,7 +22,7 @@ namespace UserManagementAPI.Models
             if (!optionsBuilder.IsConfigured)
             {
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer(@"Server=db,1433;Initial Catalog=UserManagementDB;User ID=SA;Password=Password1!;");
+                optionsBuilder.UseSqlServer(@"Server=usermanagementdb,1433;Initial Catalog=UserManagementDB;User ID=SA;Password=Password1!;");
             }
         }
 
