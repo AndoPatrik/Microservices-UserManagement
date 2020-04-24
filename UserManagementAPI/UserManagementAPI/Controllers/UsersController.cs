@@ -140,10 +140,12 @@ namespace UserManagementAPI.Controllers
                 client.Send(message);
 
                 Console.WriteLine("Message send");
+                l.LogAction("Email has been sent to user. (id=" + userId + ")");
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error: " + ex.StackTrace);
+                l.LogAction("Error while sending email.");
             }
 
             return CreatedAtAction("GetUsers", new { id = users.Id }, users);
@@ -171,10 +173,12 @@ namespace UserManagementAPI.Controllers
             var users = await _context.Users.FindAsync(id);
             if (users == null)
             {
+                l.LogAction("Deletion failed. User could not be found.");
                 return NotFound();
             }
 
             users.IsDeleted = true;
+            l.LogAction("User is set to 'Deleted'. (id=" + id + ")");
 
             _context.Entry(users).State = EntityState.Modified;
 
