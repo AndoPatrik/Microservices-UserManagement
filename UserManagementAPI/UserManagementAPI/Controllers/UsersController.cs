@@ -119,36 +119,44 @@ namespace UserManagementAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Users>> PostUsers(Users users)
         {
-            _context.Users.Add(users);
-            await _context.SaveChangesAsync();
-            
-            try
+            if(users.FirstName == null && users.LastName == null && users.Password == null && users.EmailAddress == null)
             {
-                int userId = users.Id;
-                var emailLink = new StringBuilder("");
-                emailLink.AppendFormat("<a href='https://localhost:44322/api/Users/validate{0}' target='_blank'>Click here to verify your account .. </a>", userId);
-                string emailLinkStr = emailLink.ToString();
-                string emailBody = $"Dear {users.FirstName}, {Environment.NewLine} Please, click on the following link to verify your account: {Environment.NewLine}" +
-                    $" {emailLinkStr} {Environment.NewLine} SD-Air team";
-            
-                MailMessage message = new MailMessage("sd.airline@gmail.com", users.EmailAddress, "Account verification", emailBody);                
-                message.IsBodyHtml = true;
-
-                SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
-                client.EnableSsl = true;
-                client.Credentials = new System.Net.NetworkCredential("sd.airline@gmail.com", "Az123456!");
-                client.Send(message);
-
-                Console.WriteLine("Message send");
-                l.LogAction("Email has been sent to user. (id=" + userId + ")");
+                l.LogAction("User post failed. Object is empty");
+                return NotFound();
             }
-            catch (Exception ex)
+            else
             {
-                Console.WriteLine("Error: " + ex.StackTrace);
-                l.LogAction("Error while sending email.");
-            }
+                _context.Users.Add(users);
+                await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUsers", new { id = users.Id }, users);
+                try
+                {
+                    int userId = users.Id;
+                    var emailLink = new StringBuilder("");
+                    emailLink.AppendFormat("<a href='https://localhost:44322/api/Users/validate{0}' target='_blank'>Click here to verify your account .. </a>", userId);
+                    string emailLinkStr = emailLink.ToString();
+                    string emailBody = $"Dear {users.FirstName}, {Environment.NewLine} Please, click on the following link to verify your account: {Environment.NewLine}" +
+                        $" {emailLinkStr} {Environment.NewLine} SD-Air team";
+
+                    MailMessage message = new MailMessage("sd.airline@gmail.com", users.EmailAddress, "Account verification", emailBody);
+                    message.IsBodyHtml = true;
+
+                    SmtpClient client = new SmtpClient("smtp.gmail.com", 587);
+                    client.EnableSsl = true;
+                    client.Credentials = new System.Net.NetworkCredential("sd.airline@gmail.com", "Az123456!");
+                    client.Send(message);
+
+                    Console.WriteLine("Message send");
+                    l.LogAction("Email has been sent to user. (id=" + userId + ")");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error: " + ex.StackTrace);
+                    l.LogAction("Error while sending email.");
+                }
+
+                return CreatedAtAction("GetUsers", new { id = users.Id }, users);
+            }            
         }
 
         //// DELETE: api/Users/5
