@@ -19,5 +19,17 @@ namespace UserManagementAPI.Models
         {
 
         }
+
+        public Users(string firstName, string lastName, bool? gender, string password, string emailAddress, string phoneNumber, bool? isVerified, bool? isDeleted)
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Gender = gender;
+            Password = password;
+            EmailAddress = emailAddress;
+            PhoneNumber = phoneNumber;
+            IsVerified = isVerified;
+            IsDeleted = isDeleted;
+        }
     }
 }

@@ -81,37 +81,37 @@ namespace UserManagementAPI.Controllers
             return users;
         }
 
-        //// PUT: api/Users/5
-        //// To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        //// more details see https://aka.ms/RazorPagesCRUD.
-        //[HttpPut("{id}")]
-        //public async Task<IActionResult> PutUsers(int id, Users users)
-        //{
-        //    if (id != users.Id)
-        //    {
-        //        return BadRequest();
-        //    }
+        // PUT: api/Users/5
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
+        // more details see https://aka.ms/RazorPagesCRUD.
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutUsers(int id, Users users)
+        {
+            if (id != users.Id)
+            {
+                return BadRequest();
+            }
 
-        //    _context.Entry(users).State = EntityState.Modified;
+            _context.Entry(users).State = EntityState.Modified;
 
-        //    try
-        //    {
-        //        await _context.SaveChangesAsync();
-        //    }
-        //    catch (DbUpdateConcurrencyException)
-        //    {
-        //        if (!UsersExists(id))
-        //        {
-        //            return NotFound();
-        //        }
-        //        else
-        //        {
-        //            throw;
-        //        }
-        //    }
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UsersExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
 
-        //    return NoContent();
-        //}
+            return NoContent();
+        }
 
         // POST: api/Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for

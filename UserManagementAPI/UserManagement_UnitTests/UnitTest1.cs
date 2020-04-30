@@ -138,5 +138,57 @@ namespace UserManagement_UnitTests
 
             //ACT & ASSERT
             Assert.ThrowsExceptionAsync<Exception>(() => userController.PostUsers(testUser));
-        }    }
+        }
+
+        [TestMethod]
+        public async Task Test_user_update()
+        {
+            Users user = new Users("John", "Doe", false, "pass", "email@mail.com", "456789123", true, false);
+            await userController.PostUsers(user);
+
+            string oldPhoneNumber = user.PhoneNumber;
+            user.PhoneNumber = "45788615";
+
+            await userController.PutUsers(3, user);
+            string newPhoneNumber = user.PhoneNumber;
+
+            Assert.AreNotEqual(oldPhoneNumber, newPhoneNumber);
+        }
+
+        [TestMethod]
+        public async Task Test_user_get_by_id()
+        {
+            int validId = 1;
+            string expectedFirstName = "Aaron";
+
+            await userController.GetUsers(validId);
+            foreach (Users user in usersList)
+            {
+                if (user.Id == validId)
+                {
+                    string actualFirstName = user.FirstName;
+                    Assert.AreEqual(expectedFirstName, actualFirstName);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Test_user_delete_by_id()
+        {
+            int validId = 1;
+            bool initialDeletedValue = false;
+
+            userController.isDeletedUser(validId);
+            foreach (Users user in usersList)
+            {
+                if (user.Id == validId)
+                {
+                    bool? finalDeletedValue = user.IsDeleted;
+                    Assert.AreNotEqual(initialDeletedValue, finalDeletedValue);
+                }
+            }
+        }
+
+    }
+
 }
