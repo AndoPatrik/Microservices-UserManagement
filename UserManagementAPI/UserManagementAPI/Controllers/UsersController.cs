@@ -15,6 +15,7 @@ namespace UserManagementAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly UserManagementContext _context = new UserManagementContext();
+        private readonly UsermanagementProducer producer = new UsermanagementProducer();
 
         Logger l = new Logger();
 
@@ -24,6 +25,7 @@ namespace UserManagementAPI.Controllers
         public async Task<ActionResult<IEnumerable<Users>>> GetUsers()
         {
             l.LogAction("Requested list of all users.");
+            producer.Produce("GET all users event fired...");
             return await _context.Users.ToListAsync();
         }
 
@@ -36,6 +38,7 @@ namespace UserManagementAPI.Controllers
             if (users == null)
             {
                 l.LogAction("Requested user(s) by id with no results.");
+                producer.Produce($"GET id {id} User event fired...");
                 return NotFound();
             }
 
@@ -97,6 +100,7 @@ namespace UserManagementAPI.Controllers
             try
             {
                 await _context.SaveChangesAsync();
+                producer.Produce("PUT User event fired...");
             }
             catch (DbUpdateConcurrencyException)
             {
@@ -118,7 +122,7 @@ namespace UserManagementAPI.Controllers
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<Users>> PostUsers(Users users)
-        {
+            {
             if(users.FirstName == null && users.LastName == null && users.Password == null && users.EmailAddress == null)
             {
                 l.LogAction("User post failed. Object is empty");
@@ -128,6 +132,7 @@ namespace UserManagementAPI.Controllers
             {
                 _context.Users.Add(users);
                 await _context.SaveChangesAsync();
+                producer.Produce("POST User event fired...");
 
                 try
                 {

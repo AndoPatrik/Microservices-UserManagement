@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using UserManagementAPI.Models;
 
 namespace UserManagementAPI.Controllers
 {
@@ -11,6 +12,9 @@ namespace UserManagementAPI.Controllers
     [Route("[controller]")]
     public class WeatherForecastController : ControllerBase
     {
+        private readonly UsermanagementProducer producer = new UsermanagementProducer();
+
+
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
@@ -26,6 +30,7 @@ namespace UserManagementAPI.Controllers
         [HttpGet]
         public IEnumerable<WeatherForecast> Get()
         {
+            producer.Produce("test");
             var rng = new Random();
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast
             {
